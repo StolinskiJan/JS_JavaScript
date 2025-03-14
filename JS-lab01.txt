@@ -1,0 +1,30 @@
+index.html 
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Zadanie 1</title>
+</head>
+<body>
+  <h1>Niech wrzystko płonie bo to moje!</h1>
+  <script src="script.js"></script>  //
+</body>
+</html>
+
+script.js
+
+
+//let text = "Witaj w świecie JavaScript!"
+//console.log("Witaj w świecie JavaScript!")
+
+//console.log(typeof 42);      // Sprawdzamy typ liczby
+//console.log(typeof "Hello"); // Sprawdzamy typ łańcucha znaków
+//console.log(typeof true);    // Sprawdzamy typ wartości boolean
+//console.log(typeof null);
+
+//console.log(10 + "5");
+
+let name = "Jan";      // Tekst
+let age = 25;          // Liczba
+let isStudent = true;  // Wartość logiczna
