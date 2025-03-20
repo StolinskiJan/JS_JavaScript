@@ -1,0 +1,288 @@
+//Napisz program, który poprosi użytkownika o wprowadzenie liczby i sprawdzi, czy jest ona liczbą pierwszą.
+// const number = 23
+// let isPrime = true;
+// if (number <= 1) {
+//     isPrime = false;
+// }
+//
+// else if (number > 1) {
+//     for (let i = 2; i < number; i++) {
+//         if (number % i == 0) {
+//             isPrime = false;
+//             break;
+//         }
+//     }
+// }
+// console.log(isPrime);
+
+//Napisz program, który wygeneruje tablicę z liczbami od 1 do 50, a następnie użyje pętli for...of do wyświetlenia tylko liczb parzystych.
+// let numbers = [];
+// for (let i = 1; i <= 50; i++) {
+//     numbers.push(i);
+// }
+// for (number of numbers) {
+//     if (number % 2 === 0) {
+//         console.log(number);
+//     }
+// }
+
+//Napisz kod, który przy użyciu switch przypisze do zmiennej dayType wartość "weekend" lub "weekday" na podstawie numeru dnia tygodnia.
+// const option = 6;
+// let dayType;
+// switch (option) {
+//     case 1:
+//     case 2:
+//     case 3:
+//     case 4:
+//     case 5:
+//         dayType = 'weekday';
+//         break;
+//     case 6:
+//     case 7:
+//         dayType = 'weekend';
+//         break;
+//     default:
+//         console.log('Podaj liczbę od 1 do 7');
+//         break;
+// }
+// console.log(dayType);
+
+//Napisz program, który obliczy sumę wszystkich liczb podzielnych przez 3 i 5 w zakresie od 1 do 100.
+// let sum = 0;
+// for (let i = 1; i <= 100; i++) {
+//     if (i % 3 === 0 && i % 5 === 0) {
+//         sum += i;
+//     }
+// }
+// console.log(sum);
+
+//Napisz kod, który sprawdzi, czy podane słowo jest palindromem (czyta się tak samo od przodu i od tyłu).
+// let word = 'kajak';
+// let check = word.split('').reverse().join('');
+// if (check === word) {
+//     console.log("jest");
+// }
+// else {
+//     console.log("nie jest");
+// }
+
+//Napisz program, który utworzy obiekt z danymi użytkownika (name, age, email), a następnie za
+// pomocą for...in wyświetli wszystkie klucze i wartości.
+// let person = {
+//     name: 'John',
+//     age: 35,
+//     email: 'john@example.com',
+// }
+// for (i in person) {
+//     console.log(i, person[i]);
+// }
+
+//Napisz kod, który użyje pętli for, aby odwrócić kolejność elementów w tablicy bez użycia wbudowanej metody .reverse().
+// let colors = ['red', 'green', 'blue', 'black'];
+// let sroloc = [];
+// for (let i = colors.length - 1; i >= 0; i--) {
+//     sroloc.push(colors[i]);
+// }
+// console.log(sroloc);
+
+//Napisz kod, który przy użyciu operatora warunkowego (?) zwróci informację, czy podana liczba jest podzielna przez 2 i 3.
+// let number = 12;
+// let message = (number % 2 === 0 && number % 3 === 0) ? "Podzielna" : "Niepodzielna";
+// console.log(message)
+
+//Napisz program, który znajdzie najmniejszą i największą liczbę w tablicy [15, 42, 7, 23, 67, 1, 90].
+// let table = [15, 42, 7, 23, 67, 1, 90];
+// let min = table[0];
+// let max = table[0];
+// for (number of table) {
+//     if (number > max) {
+//         max = number;
+//     }
+//     else if (number < min) {
+//         min = number;
+//     }
+// }
+// console.log(min);
+// console.log(max);
+
+//Napisz kod, który użyje instrukcji switch do wyświetlenia nazwy miesiąca na podstawie podanego numeru (np. 1 = styczeń).
+// let option = 13;
+// switch(option) {
+//     case 1:
+//         console.log('styczeń')
+//         break;
+//     case 2:
+//         console.log('luty')
+//         break;
+//     case 3:
+//         console.log('marzec')
+//         break;
+//     case 4:
+//         console.log('')
+//         break;
+//     case 5:
+//         console.log('')
+//         break;
+//     case 6:
+//         console.log('')
+//         break;
+//     case 7:
+//         console.log('')
+//         break;
+//     case 8:
+//         console.log('')
+//         break;
+//     case 9:
+//         console.log('')
+//         break;
+//     case 10:
+//         console.log('')
+//         break;
+//     case 11:
+//         console.log('')
+//         break;
+//     case 12:
+//         console.log('')
+//         break;
+//     default:
+//         console.log('Podaj nr miesiąca od 1 do 12')
+// }
+
+//Utwórz obiekt order, który będzie zawierał tablicę obiektów items. Użyj filter(), aby zwrócić tylko elementy o cenie większej niż 50.
+// let order = {
+//     items: [
+//         {type: 'pen', price: 10},
+//         {type: 'laptop', price: 2999},
+//         {type: 'fridge', price: 1200},
+//         {type: 'notebook', price: 15},
+//     ]
+// }
+//
+// let expensive = order.items.filter(item => item.price > 50);
+// console.log(expensive);
+
+//Utwórz tablicę colors zawierającą trzy kolory. Dodaj nowy kolor na początku i na końcu tablicy.
+//Usuń element z początku i końca tablicy, a następnie wyświetl zawartość tablicy w konsoli.
+
+// let colors = ['red', 'green', 'blue'];
+// colors.unshift('black');
+// colors.push('white');
+// colors.shift();
+// colors.pop();
+// console.log(colors);
+
+//Utwórz tablicę numbers zawierającą liczby od 1 do 20. Utwórz nową tablicę zawierającą tylko liczby
+//podzielne przez 3, a następnie zmień każdą wartość w nowej tablicy, podnosząc ją do kwadratu.
+
+// let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+// let numbers2 = numbers.filter(number => number % 3 == 0).map(number => number **2)
+// console.log(numbers2);
+
+//Utwórz tablicę names zawierającą imiona. Znajdź pierwsze imię, które
+//zaczyna się na literę "A". Posortuj tablicę alfabetycznie w kolejności rosnącej.
+
+// let names = ['Dominiqueue', 'Simon', 'John', 'Janek', 'Simon', 'Amelia'];
+// let aName = names.find(x => x[0] === 'A');
+// let sorted = names.sort();
+// console.log(aName);
+// console.log(sorted);
+
+//Utwórz obiekt person zawierający klucze name, age, city. Dodaj nową
+//właściwość country i przypisz do niej dowolną wartość. Następnie usuń jedną z
+//właściwości i wyświetl wszystkie klucze i wartości obiektu w konsoli.
+
+// let person = {
+//     name: 'John',
+//     age: 35,
+//     city: 'January',
+// }
+// person.country = "February";
+// delete person.age;
+// console.log(person)
+
+//Utwórz obiekt person, który będzie zawierał zagnieżdżony obiekt address
+// z kluczami city i country. Zmień wartość klucza country na nową wartość
+// i sprawdź, czy zmiana wpłynęła na oryginalny obiekt.
+
+// let person = {
+//     address: {
+//         city: 'New York',
+//         country: 'United States',
+//     }
+// }
+// person.address.country = 'Estados Unidos';
+// console.log(person);
+
+//Utwórz obiekt person z kluczami name i age. Utwórz jego kopię na
+// dwa sposoby – za pomocą metody i operatora. Zmień wartość klucza w kopii
+// i sprawdź, czy zmiana wpłynęła na oryginalny obiekt dla obu wersji.
+
+// let person = {
+//     name: 'John',
+//     age: 35,
+// }
+//
+// let person1 = {...person}; //operator??
+// let person2 = Object.assign({}, person); //metoda?
+//
+// person1.name = 'Johnnnnn';
+// person2.name = 'Johnnnnnnnnn';
+//
+// console.log(person);
+// console.log(person1);
+// console.log(person2);
+
+//Utwórz tablicę obiektów products, gdzie każdy obiekt będzie miał klucze
+// name, price i quantity. Oblicz całkowitą wartość wszystkich produktów (cena
+// × ilość) i wyświetl wynik w konsoli.
+
+// let products = [
+//     {name: 'laptop', price: 2999, quantity: 2},
+//     {name: 'banana', price: 2997, quantity: 3000},
+//     {name: 'notebook', price: 15, quantity: 43},
+// ]
+// let sum = products.reduce((x, y) => x + y.price * y.quantity, 0);
+// console.log(sum);
+
+//Utwórz tablicę obiektów students, gdzie każdy obiekt będzie zawierał
+// klucze name, age i grades (tablica ocen). Utwórz nową tablicę zawierającą
+// tylko imiona pełnoletnich studentów.
+
+// let students = [
+//     {name: 'Simon', age: 22, grades: [5, 5, 5, 5, 5]},
+//     {name: 'Simon', age: 49, grades: [11, 13, 17]},
+//     {name: 'Dominiqueueue', age: 22, grades: [3, 3, 3, 3, 3]},
+// ]
+//
+// let adult = students.filter(student => student.age > 17).map(student => student.name)
+// console.log(adult)
+
+//Utwórz tablicę obiektów employees, gdzie każdy obiekt będzie miał
+// klucze name, department i salary. Zwróć obiekt pracownika o najwyższym
+// wynagrodzeniu.
+
+// let employees = [
+//     {name: "John", department: "IT", salary: 4666},
+//     {name: "Jan", department: "Garbage disposal", salary: 500},
+//     {name: "Dominiżyna", department: "R&D", salary: 9001},
+// ]
+// let richest = employees[0];
+// for (employee of employees) {
+//     if (employee.salary > richest.salary) {
+//         richest = employee;
+//     }
+// }
+// console.log(richest);
+
+//Utwórz tablicę obiektów orders, gdzie każdy obiekt będzie zawierał
+// klucze product, price i quantity. Znajdź zamówienia o wartości powyżej 100
+// i zwróć nową tablicę zawierającą tylko nazwy produktów.
+
+// let orders = [
+//     {product: 'laptop', price: 2999, quantity: 2},
+//     {product: 'banana', price: 2997, quantity: 3000},
+//     {product: 'notebook', price: 15, quantity: 43},
+// ]
+// let expensive = orders.filter(order => order.price * order.quantity > 100)
+// let productNames = orders.map(order => order.product)
+// console.log(productNames)
