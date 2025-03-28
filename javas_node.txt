@@ -10,3 +10,5 @@ dodaje sobie index.js
 
 
 w cmd mogę wpisać node by wyjść .exit by stworzyć nmp init
+
+https://codeshare.io/morszczuk
