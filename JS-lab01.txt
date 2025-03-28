@@ -28,3 +28,19 @@ script.js
 let name = "Jan";      // Tekst
 let age = 25;          // Liczba
 let isStudent = true;  // Wartość logiczna
+
+
+
+Na 1 teście z java scriptu
+// for ( ;; ) {
+//   console.log("Hello");
+// }
+
+// var fruit = 'apple'
+//
+// {
+//   var fruit = 'orange'
+//   console.log(fruit)
+// }
+//
+// console.log(fruit)
