@@ -1,0 +1,9 @@
+tworze nowy node w projekcie
+
+Przechodzę na główny folder na góże untitled1 
+wpisuję tam na terminalu:
+
+npm install express
+
+
+dodaje sobie index.js
