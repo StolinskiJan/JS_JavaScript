@@ -1,0 +1,760 @@
+4 Node.js
+
+Node.js został zaprezentowany po raz pierwszy w 2009 roku. Powstał jako
+odpowiedź na ograniczenia, jakie napotykały serwery HTTP napisane w tradycyjnych
+językach backendowych (PHP, Ruby, Java), które działały synchronicznie i były
+mniej wydajne w obsłudze wielu równoczesnych połączeń.
+
+Zauważono, że JavaScript – wcześniej używany wyłącznie po stronie klienta
+(w przeglądarkach) – może być również skutecznie używany po stronie serwera, jeśli
+zostanie osadzony w odpowiednim środowisku wykonawczym. Takim środowiskiem
+stał się V8 Engine – szybki silnik JavaScript stworzony przez Google na potrzeby
+przeglądarki Chrome.
+
+Node.js zrewolucjonizował sposób, w jaki tworzy się aplikacje serwerowe, oferując
+lekkie, asynchroniczne i zorientowane na zdarzenia podejście.
+
+
+4.1 Różnice między Node.js a przeglądarkowym JavaScriptem
+
+Cecha Node.js vs JavaScript w przeglądarce
+Środowisko wykonawcze Node.js działa na silniku V8 poza przeglądarką
+API Node.js oferuje API systemowe (fs, http, path)
+Zastosowanie Backend, serwery, aplikacje CLI vs. frontend w przeglądarce
+Dostęp do systemu plików Node.js ma dostęp do systemu plików, JS w przeglądarce nie
+Dostęp do sieci Node.js umożliwia pełną kontrolę nad połączeniami
+Bezpieczeństwo Node.js działa bez sandboxa – wymaga ostrożności
+
+1
+
+4.2 Dlaczego Node.js zyskał popularność?
+
+1. Asynchroniczność i Event Loop
+Umożliwia obsługę wielu połączeń bez blokowania wątków – idealne dla aplikacji
+sieciowych i real-time.
+
+2. Jednolity język: JavaScript wszędzie
+Umożliwia tworzenie aplikacji full-stack wyłącznie w JavaScript (frontend
++ backend).
+
+3. Ogromna społeczność i ekosystem (NPM)
+Największy na świecie rejestr paczek open-source. Tysiące gotowych bibliotek,
+narzędzi, frameworków (np. Express.js, Socket.io).
+
+4. Lekkość i wydajność
+Idealny do aplikacji, które wymagają niskiego zużycia zasobów i szybkiej obsługi
+wielu żądań (np. API, czaty, serwisy streamingowe).
+
+5. Łatwe rozpoczęcie pracy
+Prosta instalacja i szybki czas tworzenia działającego prototypu. Doskonałe
+dla startupów, MVP, mikroserwisów.
+
+6. Użycie przez wielkie firmy
+Technologia wspierana przez takie firmy jak Netflix, LinkedIn, PayPal, Uber,
+NASA – co zwiększyło zaufanie do platformy.
+
+4.3 Środowisko wykonawcze
+
+4.3.1 V8 Engine
+
+Node.js opiera się na silniku V81
+, który został stworzony przez firmę Google
+i jest wykorzystywany m.in. w przeglądarce Chrome. V8 kompiluje kod JavaScript
+bezpośrednio do kodu maszynowego, co zapewnia wysoką wydajność. Dzięki temu
+Node.js może wykonywać kod JavaScript szybko i efektywnie – nawet w środowisku
+serwerowym.
+
+V8 jest napisany w C++ i sam w sobie nie zapewnia funkcji związanych z systemem plików, siecią czy bazami danych. To właśnie Node.js „owija” V8, rozszerzając
+go o takie możliwości, udostępniając funkcje systemowe poprzez interfejsy JavaScriptowe (np. moduł fs, http itd.).
+
+1V8 jest rozwijany niezależnie od Node.js, ale stanowi jego fundament wykonawczy.
+
+2
+
+.–Ważne
+
+V8 to szybki silnik do uruchamiania JS (kompiluje do maszynowego), natomiast
+Node.js to środowisko uruchomieniowe JS poza przeglądarką, z dodatkowymi
+API. Dzięki połączeniu tych dwóch komponentów możliwe jest tworzenie aplikacji
+serwerowych w języku JavaScript.
+
+4.3.2 Jednowątkowość a asynchroniczność
+
+Node.js działa w modelu jednowątkowym, co oznacza, że kod użytkownika
+wykonywany jest w jednym głównym wątku. W przeciwieństwie do tradycyjnych serwerów, które dla każdego połączenia tworzą nowy wątek (co wiąże się z dużym kosztem
+zasobów), Node.js wykorzystuje podejście asynchroniczne i oparte na zdarzeniach.
+
+Asynchroniczność oznacza, że operacje, które zajmują dużo czasu (np. odczyt
+pliku, zapytanie do bazy danych), mogą być wykonywane w tle, a główny wątek
+w tym czasie zajmuje się czymś innym.
+
+Jednowątkowość ̸= blokowanie - Node.js wykorzystuje tzw. libuv, czyli bibliotekę C, która umożliwia asynchroniczne operacje wewnątrz systemowego Thread
+Pool. To znaczy, że faktycznie wielowątkowość istnieje pod spodem – ale użytkownik
+pisze kod w modelu jednowątkowym.
+
+1 fs. readFile (’plik .txt ’, (err , data ) = > {
+2 if (err ) throw err ;
+3 console .log ( data . toString () ) ;
+4 }) ;
+
+W powyższym przykładzie główna pętla nie czeka na zakończenie operacji – plik
+czytany jest w tle, a po zakończeniu uruchamiany jest callback.
+
+4.3.3 Event Loop – mechanizm działania
+
+Event Loop to główny mechanizm zarządzający przepływem zadań w Node.js.
+Obsługuje kolejkę zdarzeń i decyduje, które funkcje powinny zostać wykonane
+w danym momencie. Całość można porównać do listy zadań, które są stale sprawdzane:
+
+• Jeśli są nowe zadania (np. zakończone operacje I/O), Event Loop uruchamia
+ich callbacki.
+
+• Jeśli nie ma zadań, Event Loop „czeka”, aż jakieś się pojawią
+
+3
+
+Działa to w cyklach zwanych ticks. Każdy tick to jedna iteracja pętli, w której
+Node:
+
+1. Sprawdza kolejkę mikro-zadań (promisy, process.nextTick).
+2. Obsługuje kolejkę I/O (np. zakończone odczyty plików, odpowiedzi serwera).
+3. Obsługuje zadania z setTimeout, setImmediate.
+
+.–Ważne
+
+W skrócie: Event Loop zapewnia, że mimo jednowątkowości aplikacja może sprawnie
+obsługiwać wiele rzeczy naraz – poprzez sprytne zarządzanie kolejkami i zdarzeniami.
+
+4.3.4 Non-blocking I/O
+
+Jedną z najważniejszych cech Node.js jest to, że operacje wejścia/wyjścia (I/O) są
+nieblokujące. To oznacza, że np. podczas czytania pliku aplikacja nie zatrzymuje
+się – wykonuje inne zadania, a kiedy plik zostanie wczytany, wynik jest przetwarzany.
+
+W tradycyjnych językach (np. PHP, Python) wykonanie kodu wygląda zwykle
+synchronicznie:
+
+1 $content = file_get_contents (’plik . txt ’) ;
+2 echo $content ;
+
+Tutaj program czeka, aż plik zostanie wczytany – dopiero potem idzie dalej.
+W Node.js działa to inaczej:
+
+1 fs. readFile (’plik .txt ’, (err , data ) = > {
+2 if (err ) throw err ;
+3 console .log ( data . toString () ) ;
+4 }) ;
+5 console .log (’Czytam plik ... ’) ;
+
+Wynik działania będzie:
+
+1 > Czytam plik ...
+2 > <tresc pliku >
+
+Czyli najpierw wypisze się komunikat, a dopiero później treść pliku – bo Node.js
+nie czeka na zakończenie odczytu.
+
+4
+
+Dzięki non-blocking I/O można obsługiwać tysiące zapytań bez potrzeby tworzenia
+tysięcy wątków, co czyni Node.js idealnym narzędziem do tworzenia wydajnych i
+skalowalnych aplikacji webowych.
+
+4.4 Pierwszy projekt w Node.js
+
+4.4.1 Instalacja Node.js
+
+Aby rozpocząć pracę z Node.js, należy zainstalować środowisko z oficjalnej strony:
+https://nodejs.org. Po instalacji dostępne będą dwa polecenia (wpisywane w konsoli systemowej / terminalu):
+
+1 node -v // sprawdzenie wersji Node .js
+2 npm -v // sprawdzenie wersji NPM ( Node Package Manager )
+
+4.4.2 Inicjalizacja projektu
+
+Standardowym sposobem rozpoczęcia projektu w Node.js jest utworzenie pliku
+package.json, który zawiera informacje o projekcie, jego zależnościach i skryptach.
+Inicjalizacja odbywa się poleceniem:
+
+1 npm init
+
+Lub z domyślnymi wartościami (bez interaktywnego kreatora):
+
+1 npm init -y
+
+Przykładowy wynikowy plik package.json:
+
+1 {
+2 " name ": "moj - projekt ",
+3 " version ": " 1.0.0 ",
+4 " main ": " index .js",
+5 " scripts ": {
+6 " start ": " node index .js"
+7 } ,
+8 " license ": "MIT"
+9 }
+
+5
+
+4.4.3 Instalacja zależności
+
+Node.js korzysta z menedżera pakietów npm, który pozwala instalować biblioteki
+z repozytorium npmjs.com. Przykład instalacji biblioteki:
+
+1 npm install express
+
+Zainstalowane paczki trafiają do folderu node_modules, a informacje o nich
+zapisywane są w package.json i package-lock.json.
+
+4.4.4 Struktura prostego projektu
+
+moj-projekt/
+|----- node_modules/
+|----- index.js
+|----- package.json
+|----- package-lock.json
+
+• index.js – główny plik wejściowy aplikacji. To tutaj zaczyna się wykonywanie
+programu po uruchomieniu polecenia node index.js. Można oczywiście używać innej nazwy pliku (np. app.js), ale wtedy należy odpowiednio ustawić
+pole main w package.json.
+
+• package.json – najważniejszy plik konfiguracyjny projektu Node.js. Zawiera:
+– nazwę i wersję projektu,
+– zależności (dependencies i devDependencies),
+– skrypty uruchamiane przez npm run,
+– punkt wejściowy aplikacji (main),
+– licencję, autora i inne metadane.
+
+• package-lock.json – plik automatycznie generowany przez npm. Zawiera
+dokładne wersje zainstalowanych pakietów oraz ich zależności. Gwarantuje
+spójność środowiska między różnymi komputerami.
+
+• node_modules/ – folder, w którym znajdują się wszystkie zainstalowane
+pakiety (np. express, lodash). Nie powinien być ręcznie modyfikowany.
+Zazwyczaj nie umieszcza się go w repozytorium (powinien być ignorowany
+w pliku .gitignore).
+
+6
+
+4.4.5 Uruchamianie projektu
+
+Istnieje wiele sposobów na uruchomienie projektu Node.js. Najczęściej wykorzystuje się terminal lub edytor kodu z wbudowanymi funkcjami.
+1. Z poziomu terminala (Node CLI)
+
+Najprostszy sposób to użycie polecenia node:
+
+1 node index .js
+
+Można też użyć skryptu zdefiniowanego w package.json:
+
+1 npm start
+
+(jeśli w package.json znajduje się np. "start": "node index.js")
+
+2. Z poziomu WebStorm (JetBrains)
+
+WebStorm automatycznie wykrywa plik index.js. Aby uruchomić projekt:
+• Otwórz plik index.js,
+• Kliknij zieloną strzałkę obok funkcji głównej lub nazw plików,
+• Wybierz Run ’index.js’ z menu kontekstowego,
+• Alternatywnie: kliknij prawym przyciskiem myszy i wybierz Run.
+
+WebStorm pozwala także konfigurować złożone środowiska uruchomieniowe
+(np. z użyciem nodemon lub z parametrami wejściowymi).
+
+3. Z poziomu Visual Studio Code (VS Code)
+
+Visual Studio Code pozwala uruchamiać projekty Node.js na kilka sposobów:
+• Otwórz folder z projektem,
+• Otwórz plik index.js,
+• Kliknij przycisk „Run” () w prawym górnym rogu,
+• Lub użyj skrótu klawiaturowego: F5 (domyślnie uruchamia node).
+Można też skonfigurować środowisko uruchomieniowe w pliku .vscode/launch.json,
+by np. uruchamiać z parametrami lub debuggerem.
+
+7
+
+4.5 Moduły
+
+4.5.1 System modułów w Node.js
+
+Node.js wspiera dwa główne systemy modułów:
+
+1. CommonJS – domyślny system modułów w Node.js (do wersji 12).
+2. ES Modules (ESM) – nowoczesny system importów (zgodny ze specyfikacją
+ECMAScript).
+
+Domyślnie Node.js używa CommonJS, ale od wersji 14+ można przełączyć się na
+ES Modules dodając "type": "module" w pliku package.json.
+
+4.5.2 Common.JS
+1 // math .js
+2 function add(a, b) {
+3 return a + b;
+4 }
+5 module . exports = { add };
+6
+7 // app .js
+8 const math = require (’./ math ’) ;
+9 console .log ( math .add (2 , 3) ) ; // 5
+
+4.5.3 ES Modules
+1 // math .mjs
+2 export function add (a, b) {
+3 return a + b;
+4 }
+5
+6 // app .mjs
+7 import { add } from ’./ math .mjs ’;
+8 console .log (add (2 , 3) ) ; // 5
+
+4.5.4 Moduły wbudowane (core modules)
+Node.js posiada zestaw wbudowanych modułów, które są dostępne bez instalacji
+dodatkowych paczek. Najważniejsze z nich to:
+
+8
+
+Moduł Opis
+
+fs Obsługa systemu plików (File System)
+path Narzędzia do pracy ze ścieżkami plików
+http Tworzenie serwerów HTTP
+os Informacje o systemie operacyjnym
+crypto Szyfrowanie, haszowanie, generowanie kluczy
+url Parsowanie i formatowanie adresów URL
+events Obsługa zdarzeń i tworzenie własnych EventEmitterów
+
+1 const fs = require (’fs ’) ;
+2
+3 fs. readFile (’plik .txt ’, ’utf8 ’, (err , data ) = > {
+4 if (err ) throw err ;
+5 console .log ( data ) ;
+6 }) ;
+
+4.5.5 Tworzenie własnych modułów
+
+Każdy plik JavaScript w Node.js jest traktowany jako osobny moduł. Możemy
+definiować zmienne i funkcje lokalnie, a następnie eksportować je, aby były dostępne
+w innych plikach.
+
+1 // calculator .js
+2 function multiply (a, b) {
+3 return a * b;
+4 }
+5 module . exports = { multiply };
+6
+7 // app .js
+8 const calc = require (’./ calculator ’) ;
+9 console .log ( calc . multiply (4 , 5) ) ; // 20
+
+4.5.6 require vs. import
+• require() jest synchroniczne i używane w CommonJS.
+• import jest asynchroniczne i zgodne z ES Modules.
+
+Nie można mieszać tych systemów bez specjalnych ustawień. Dlatego ważne jest,
+by świadomie wybrać, którego systemu chcemy używać w projekcie.
+
+9
+
+
+
+
+
+
+
+
+-------------------
+https://codeshare.io/JP2GMD
+
+
+Zaimplementuj prostą aplikację konsolową do zarządzania listą zadań. Program
+ma działać z poziomu terminala i pozwalać na:
+• dodawanie nowych zadań,
+• oznaczanie zadań jako ukończone,
+• wyświetlanie listy wszystkich zadań (ukończone i nieukończone),
+• usuwanie zadań.
+Wymagania
+• Zapis danych powinien odbywać się w pliku tasks.json.
+• Każde zadanie powinno być reprezentowane jako obiekt z polami: id, title,
+completed.
+• Program powinien być podzielony na moduły (np. jeden moduł do zapisu/odczytu pliku, drugi do logiki aplikacji).
+• Wykorzystaj wbudowany moduł fs do pracy z plikami.
+• Obsłuż podstawowe błędy (np. brak pliku, błędny format danych).
+Sposób użycia (przykład)
+1 // Dodanie nowego zadania
+2 . node app.js add " Zakupy "
+3
+4 // Wyswietlenie wszystkich zadan
+5 node app .js list
+6
+7 // Oznaczenie zadania jako ukonczone
+8 node app .js done 3
+9
+10 // Usuniecie zadania
+11 node app .js remove 2
+
+
+const fs = require('fs');
+
+const FILE_NAME = 'tasks.json';
+
+const args = process.argv.slice(2);
+const [command, ...rest] = args;
+
+function loadTasks() {
+    try {
+        if (!fs.existsSync(FILE_NAME)) return [];
+        const data = fs.readFileSync(FILE_NAME, 'utf8');
+        return JSON.parse(data);
+    } catch (err) {
+        console.error('Błąd podczas wczytywania pliku:', err.message);
+        return [];
+    }
+}
+
+function saveTasks(tasks) {
+    try {
+        fs.writeFileSync(FILE_NAME, JSON.stringify(tasks, null, 2));
+    } catch (err) {
+        console.error('Błąd podczas zapisywania pliku:', err.message);
+    }
+}
+
+let tasks = loadTasks();
+
+function listTasks() {
+    if (tasks.length === 0) return console.log('Brak zadań.');
+    tasks.forEach(task => {
+        const status = task.completed ? '[X]' : '[ ]';
+        console.log(`${status} (${task.id}) ${task.title}`);
+    });
+}
+
+function addTask(title) {
+    const newTask = {
+        id: tasks.length ? tasks[tasks.length - 1].id + 1 : 1,
+        title,
+        completed: false
+    };
+    tasks.push(newTask);
+    saveTasks(tasks);
+    console.log('Dodano zadanie.');
+}
+
+function markDone(id) {
+    const task = tasks.find(t => t.id === Number(id));
+    if (!task) return console.log('Nie znaleziono zadania.');
+    task.completed = true;
+    saveTasks(tasks);
+    console.log('Zadanie oznaczone jako ukończone.');
+}
+
+function removeTask(id) {
+    const index = tasks.findIndex(t => t.id === Number(id));
+    if (index === -1) return console.log('Nie znaleziono zadania.');
+    tasks.splice(index, 1);
+    saveTasks(tasks);
+    console.log('Zadanie usunięte.');
+}
+
+switch (command) {
+    case 'list':
+        listTasks();
+        break;
+    case 'add':
+        addTask(rest.join(' '));
+        break;
+    case 'done':
+        markDone(rest[0]);
+        break;
+    case 'remove':
+        removeTask(rest[0]);
+        break;
+    default:
+        console.log('Dostępne komendy: list, add "nazwa", done ID, remove ID');
+}
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------
+https://codeshare.io/morszczuk
+
+
+
+
+const fs = require('fs');
+
+const FILE_NAME = 'tasks.json';
+
+const args = process.argv.slice(2);
+const [command, ...rest] = args;
+
+function loadTasks() {
+    try {
+        if (!fs.existsSync(FILE_NAME)) return [];
+        const data = fs.readFileSync(FILE_NAME, 'utf8');
+        return JSON.parse(data);
+    } catch (err) {
+        console.error('Błąd podczas wczytywania pliku:', err.message);
+        return [];
+    }
+}
+
+function saveTasks(tasks) {
+    try {
+        fs.writeFileSync(FILE_NAME, JSON.stringify(tasks, null, 2));
+    } catch (err) {
+        console.error('Błąd podczas zapisywania pliku:', err.message);
+    }
+}
+
+let tasks = loadTasks();
+
+function listTasks() {
+    if (tasks.length === 0) return console.log('Brak zadań.');
+    tasks.forEach(task => {
+        const status = task.completed ? '[X]' : '[ ]';
+        console.log(`${status} (${task.id}) ${task.title}`);
+    });
+}
+
+function addTask(title) {
+    const newTask = {
+        id: tasks.length ? tasks[tasks.length - 1].id + 1 : 1,
+        title,
+        completed: false
+    };
+    tasks.push(newTask);
+    saveTasks(tasks);
+    console.log('Dodano zadanie.');
+}
+
+function markDone(id) {
+    const task = tasks.find(t => t.id === Number(id));
+    if (!task) return console.log('Nie znaleziono zadania.');
+    task.completed = true;
+    saveTasks(tasks);
+    console.log('Zadanie oznaczone jako ukończone.');
+}
+
+function removeTask(id) {
+    const index = tasks.findIndex(t => t.id === Number(id));
+    if (index === -1) return console.log('Nie znaleziono zadania.');
+    tasks.splice(index, 1);
+    saveTasks(tasks);
+    console.log('Zadanie usunięte.');
+}
+
+switch (command) {
+    case 'list':
+        listTasks();
+        break;
+    case 'add':
+        addTask(rest.join(' '));
+        break;
+    case 'done':
+        markDone(rest[0]);
+        break;
+    case 'remove':
+        removeTask(rest[0]);
+        break;
+    default:
+        console.log('Dostępne komendy: list, add "nazwa", done ID, remove ID');
+}
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------
+
+czatgpt 
+
+
+task-manager/
+├── app.js
+├── tasks.json
+├── taskManager.js
+└── package.json
+
+
+npm init -y
+
+
+npm install yargs
+
+
+[]
+
+
+
+const fs = require('fs');
+const path = require('path');
+
+// Ścieżka do pliku z zadaniami
+const tasksFilePath = path.join(__dirname, 'tasks.json');
+
+// Funkcja do odczytu danych z pliku
+const readTasks = () => {
+  try {
+    const data = fs.readFileSync(tasksFilePath);
+    return JSON.parse(data);
+  } catch (err) {
+    console.error("Błąd odczytu pliku:", err);
+    return [];
+  }
+};
+
+// Funkcja do zapisania danych do pliku
+const writeTasks = (tasks) => {
+  try {
+    fs.writeFileSync(tasksFilePath, JSON.stringify(tasks, null, 2));
+  } catch (err) {
+    console.error("Błąd zapisu do pliku:", err);
+  }
+};
+
+// Funkcja do dodania nowego zadania
+const addTask = (title) => {
+  const tasks = readTasks();
+  const newTask = {
+    id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
+    title,
+    completed: false,
+  };
+  tasks.push(newTask);
+  writeTasks(tasks);
+  console.log(`Dodano zadanie: ${title}`);
+};
+
+// Funkcja do oznaczenia zadania jako ukończone
+const markTaskAsDone = (id) => {
+  const tasks = readTasks();
+  const task = tasks.find(t => t.id === parseInt(id));
+  if (task) {
+    task.completed = true;
+    writeTasks(tasks);
+    console.log(`Zadanie ${id} oznaczone jako ukończone.`);
+  } else {
+    console.log(`Zadanie o id ${id} nie istnieje.`);
+  }
+};
+
+// Funkcja do usunięcia zadania
+const removeTask = (id) => {
+  let tasks = readTasks();
+  const initialLength = tasks.length;
+  tasks = tasks.filter(task => task.id !== parseInt(id));
+  if (tasks.length === initialLength) {
+    console.log(`Zadanie o id ${id} nie zostało znalezione.`);
+  } else {
+    writeTasks(tasks);
+    console.log(`Usunięto zadanie o id ${id}`);
+  }
+};
+
+// Funkcja do wyświetlenia wszystkich zadań
+const listTasks = () => {
+  const tasks = readTasks();
+  if (tasks.length === 0) {
+    console.log('Brak zadań.');
+    return;
+  }
+  tasks.forEach(task => {
+    const status = task.completed ? 'Ukończone' : 'Nieukończone';
+    console.log(`[${task.id}] ${task.title} - ${status}`);
+  });
+};
+
+module.exports = { addTask, markTaskAsDone, removeTask, listTasks };
+
+
+Plik app.js będzie odpowiedzialny za obsługę komend wprowadzonej przez użytkownika w terminalu. 
+Będzie używał biblioteki yargs do łatwiejszego zarządzania argumentami.
+
+
+
+const yargs = require('yargs');
+const taskManager = require('./taskManager');
+
+// Komendy
+yargs.command({
+  command: 'add',
+  describe: 'Dodaj nowe zadanie',
+  builder: {
+    title: {
+      describe: 'Tytuł zadania',
+      demandOption: true,
+      type: 'string',
+    },
+  },
+  handler(argv) {
+    taskManager.addTask(argv.title);
+  },
+});
+
+yargs.command({
+  command: 'done',
+  describe: 'Oznacz zadanie jako ukończone',
+  builder: {
+    id: {
+      describe: 'ID zadania',
+      demandOption: true,
+      type: 'number',
+    },
+  },
+  handler(argv) {
+    taskManager.markTaskAsDone(argv.id);
+  },
+});
+
+yargs.command({
+  command: 'remove',
+  describe: 'Usuń zadanie',
+  builder: {
+    id: {
+      describe: 'ID zadania',
+      demandOption: true,
+      type: 'number',
+    },
+  },
+  handler(argv) {
+    taskManager.removeTask(argv.id);
+  },
+});
+
+yargs.command({
+  command: 'list',
+  describe: 'Wyświetl wszystkie zadania',
+  handler() {
+    taskManager.listTasks();
+  },
+});
+
+// Parsowanie argumentów
+yargs.parse();
+
+
+node app.js add "Zakupy"
+
+
+node app.js list
+
+
+node app.js done 3
+
+
+node app.js remove 2
