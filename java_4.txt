@@ -356,6 +356,92 @@ by świadomie wybrać, którego systemu chcemy używać w projekcie.
 
 9
 
+4.6 NPM – Node Package Manager
+
+4.6.1 Czym jest NPM?
+
+NPM (Node Package Manager) to domyślny menedżer pakietów dla Node.js.
+
+Umożliwia on:
+• instalowanie bibliotek i narzędzi z repozytorium https://www.npmjs.com,
+• zarządzanie zależnościami projektu,
+• definiowanie własnych skryptów uruchomieniowych,
+• publikowanie własnych pakietów do użytku publicznego lub prywatnego.
+
+Po instalacji Node.js, NPM jest dostępny automatycznie z linii komend.
+
+4.6.2 Podstawowe komendy NPM
+
+• npm init – inicjalizacja projektu i utworzenie pliku package.json,
+• npm install <nazwa> – instalacja paczki i dodanie jej do zależności,
+• npm install <nazwa> −−save-dev – instalacja paczki tylko do środowiska
+developerskiego,
+• npm uninstall <nazwa> – usunięcie paczki z projektu,
+• npm update – aktualizacja zależności,
+• npm list – lista zainstalowanych paczek w projekcie.
+
+4.6.3 dependencies vs devDependencies
+
+W pliku package.json zależności dzielą się na:
+• dependencies – paczki niezbędne do działania aplikacji (np. express),
+• devDependencies – paczki potrzebne tylko podczas tworzenia (np. nodemon,
+eslint).
+
+4.6.4 Przykład instalacji paczek
+
+Instalacja frameworka Express:
+
+1 npm install express
+
+Instalacja narzędzia developerskiego:
+
+1 npm install --save -dev nodemon
+
+10
+
+4.6.5 Skrypty NPM
+
+W sekcji scripts pliku package.json można definiować własne polecenia, które
+uruchamia się za pomocą:
+
+1 npm run <nazwa_skryptu >
+
+Przykład:
+
+1 " scripts ": {
+2 " start ": " node index .js",
+3 "dev": " nodemon index .js"
+4 }
+
+Uruchomienie:
+
+1 npm start
+2 npm run dev
+
+4.6.6 Plik .gitignore
+
+W projektach Node.js standardowo ignoruje się katalog node_modules, ponieważ
+zawiera on ogromną ilość danych, które można zawsze odtworzyć na podstawie
+package.json i package-lock.json.
+
+Przykład zawartości pliku .gitignore:
+1 node_modules /
+2 .env
+3 . DS_Store
+
+4.7 Obsługa plików (moduł fs)
+
+4.7.1 Moduł fs – podstawowe informacje
+
+Moduł fs (skrót od File System) jest jednym z wbudowanych modułów Node.js
+i służy do pracy z systemem plików. Umożliwia:
+• odczyt i zapis plików,
+• tworzenie i usuwanie plików oraz folderów,
+• sprawdzanie istnienia pliku,
+• pobieranie statystyk (np. rozmiaru, daty modyfikacji),
+• operacje synchroniczne i asynchroniczne.
+
+11
 
 
 
@@ -363,7 +449,8 @@ by świadomie wybrać, którego systemu chcemy używać w projekcie.
 
 
 
--------------------
+
+--------------------------------------
 https://codeshare.io/JP2GMD
 
 
@@ -473,6 +560,8 @@ switch (command) {
     default:
         console.log('Dostępne komendy: list, add "nazwa", done ID, remove ID');
 }
+
+
 
 
 
